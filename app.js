@@ -19,8 +19,8 @@ const PostRouter = require("./routes/postrouters");
 const LikeRouter = require("./routes/likeroutes");
 const CommentRouter = require("./routes/commenrroutes");
 const StoryRouter = require("./routes/storyrouters");
-
-
+const SkillsRouter = require("./routes/skillsroutes");
+const ExperienceRouter = require("./routes/experienceroutes");
 
 
 var app = express();
@@ -54,8 +54,8 @@ app.use("/api/post", PostRouter);
 app.use("/api/like", LikeRouter);
 app.use("/api/comment", CommentRouter);
 app.use("/api/story", StoryRouter);
-
-
+app.use("/api/skills",SkillsRouter);
+app.use("/api/experience", ExperienceRouter);
 
 
 
