@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 // Define the customer schema
 const User = function (User) {
-  this.id = User.id;
+  this.user_id = User.user_id;
   this.first_name = User.first_name;
   this.last_name = User.last_name;
   this.username = User.username;
@@ -13,6 +13,7 @@ const User = function (User) {
   this.profilePic = User.profilePic;
   this.address = User.address;
   this.resume = User.resume;
+  this.about = User.about;
   
 };
 
@@ -47,7 +48,7 @@ User.getByUserPassword = (username, password, result) => {
 
 //
 User.getById = (id, result) => {
-  db.query('SELECT * From users WHERE id = ?' , 
+  db.query('SELECT * From users WHERE user_id = ?' , 
    id, (err, res) => {
     if (err) {
       console.error("Error reading User:", err);
@@ -64,7 +65,7 @@ User.getById = (id, result) => {
 // Update a user profile
 User.updateById = (id, updateduser, result) => {
   db.query(
-    "UPDATE users SET ? WHERE id = ?",
+    "UPDATE users SET ? WHERE user_id = ?",
     [updateduser, id],
     (err, res) => {
       if (err) {

@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 // Define the customer schema
 const Like = function (Like) {
-  this.id = Like.id;
+  this.like_id = Like.like_id;
   this.userId = Like.userId;
   this.postId = Like.postId;
 
@@ -23,7 +23,7 @@ Like.create = (newLike, result) => {
 
 // Read all Likes
 Like.getAll = (result) => {
-    db.query('SELECT * FROM like ORDER BY id DESC;', (err, res) => {
+    db.query('SELECT * FROM like ORDER BY like_id DESC;', (err, res) => {
       if (err) {
         console.error('Error reading Like:', err);
         result(err, null);
@@ -35,7 +35,7 @@ Like.getAll = (result) => {
   
   // Read a single record
   Like.getById = (id, result) => {
-    db.query('SELECT * FROM like WHERE id = ?', id, (err, res) => {
+    db.query('SELECT * FROM like WHERE like_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error reading Like:', err);
         result(err, null);
@@ -50,7 +50,7 @@ Like.getAll = (result) => {
   // Update a record
   Like.updateById = (id, updatedRecord, result) => {
     db.query(
-      'UPDATE like SET ? WHERE id = ?',
+      'UPDATE like SET ? WHERE like_id = ?',
       [updatedRecord, id],
       (err, res) => {
         if (err) {
@@ -67,7 +67,7 @@ Like.getAll = (result) => {
   
   // Delete a record
   Like.deleteById = (id, result) => {
-    db.query('DELETE FROM like WHERE id = ?', id, (err, res) => {
+    db.query('DELETE FROM like WHERE like_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);

@@ -3,9 +3,15 @@ const db = require("../config/db");
 // Define the customer schema
 const Experience = function (Experience) {
   this.experience_id = Experience.Experience_id;
-  this.experience = Experience.experience;
-  this.user_id = Experience.user_id;
-
+  this.company_name = Experience.company_name;
+  this.start_year = Experience.start_year;
+  this.end_year = Experience.end_year;
+  this.description = Experience.description;
+  this.profile_heading = Experience.profile_heading;
+  this.employe_type = Experience.employe_type;
+  this.location = Experience.location;
+  this.location_type = Experience.location_type;
+  
 };
 
 // Create a new Experience

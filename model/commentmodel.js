@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 // Define the customer schema
 const Comment = function (Comment) {
-  this.id = Comment.id;
+  this.comment_id = Comment.comment_id;
   this.desc = Comment.desc;
   this.createdAt = Comment.createdAt;
   this.userId = Comment.userId;
@@ -25,7 +25,7 @@ Comment.create = (newComment, result) => {
 
 // Read all Comments
 Comment.getAll = (result) => {
-    db.query('SELECT * FROM comment ORDER BY id DESC;', (err, res) => {
+    db.query('SELECT * FROM comment ORDER BY comment_id DESC;', (err, res) => {
       if (err) {
         console.error('Error reading Comment:', err);
         result(err, null);
@@ -37,7 +37,7 @@ Comment.getAll = (result) => {
   
   // Read a single record
   Comment.getById = (id, result) => {
-    db.query('SELECT * FROM comment WHERE id = ?', id, (err, res) => {
+    db.query('SELECT * FROM comment WHERE comment_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error reading Comment:', err);
         result(err, null);
@@ -52,7 +52,7 @@ Comment.getAll = (result) => {
   // Update a record
   Comment.updateById = (id, updatedRecord, result) => {
     db.query(
-      'UPDATE comment SET ? WHERE id = ?',
+      'UPDATE comment SET ? WHERE comment_id = ?',
       [updatedRecord, id],
       (err, res) => {
         if (err) {
@@ -69,7 +69,7 @@ Comment.getAll = (result) => {
   
   // Delete a record
   Comment.deleteById = (id, result) => {
-    db.query('DELETE FROM comment WHERE id = ?', id, (err, res) => {
+    db.query('DELETE FROM comment WHERE comment_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);

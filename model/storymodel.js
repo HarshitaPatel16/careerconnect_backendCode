@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 // Define the customer schema
 const Story = function (Story) {
-  this.id = Story.id;
+  this.story_id = Story.story_id;
   this.story_img = Story.story_img;
   this.userId = Story.userId;
   this.story_img_path = Story.story_img_path;
@@ -23,7 +23,7 @@ Story.create = (newStory, result) => {
 
 // Read all Storys
 Story.getAll = (result) => {
-    db.query('SELECT * FROM stories ORDER BY id DESC;', (err, res) => {
+    db.query('SELECT * FROM stories ORDER BY story_id DESC;', (err, res) => {
       if (err) {
         console.error('Error reading Story:', err);
         result(err, null);
@@ -35,7 +35,7 @@ Story.getAll = (result) => {
   
   // Read a single record
   Story.getById = (id, result) => {
-    db.query('SELECT * FROM stories WHERE id = ?', id, (err, res) => {
+    db.query('SELECT * FROM stories WHERE story_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error reading Story:', err);
         result(err, null);
@@ -50,7 +50,7 @@ Story.getAll = (result) => {
   // Update a record
   Story.updateById = (id, updatedRecord, result) => {
     db.query(
-      'UPDATE stories SET ? WHERE id = ?',
+      'UPDATE stories SET ? WHERE story_id = ?',
       [updatedRecord, id],
       (err, res) => {
         if (err) {
@@ -67,7 +67,7 @@ Story.getAll = (result) => {
   
   // Delete a record
   Story.deleteById = (id, result) => {
-    db.query('DELETE FROM stories WHERE id = ?', id, (err, res) => {
+    db.query('DELETE FROM stories WHERE story_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);

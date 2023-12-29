@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 // Define the customer schema
 const Post = function (Post) {
-  this.id = Post.id;
+  this.post_id = Post.post_id;
   this.desc = Post.desc;
   this.userId = Post.userId;
   this.createdAt = Post.createdAt;
@@ -26,7 +26,7 @@ Post.create = (newPost, result) => {
 
 // Read all posts
 Post.getAll = (result) => {
-    db.query('SELECT * FROM posts ORDER BY id DESC;', (err, res) => {
+    db.query('SELECT * FROM posts ORDER BY post_id DESC;', (err, res) => {
       if (err) {
         console.error('Error reading Post:', err);
         result(err, null);
@@ -38,7 +38,7 @@ Post.getAll = (result) => {
   
   // Read a single record
   Post.getById = (id, result) => {
-    db.query('SELECT * FROM posts WHERE id = ?', id, (err, res) => {
+    db.query('SELECT * FROM posts WHERE post_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error reading Post:', err);
         result(err, null);
@@ -53,7 +53,7 @@ Post.getAll = (result) => {
   // Update a record
   Post.updateById = (id, updatedRecord, result) => {
     db.query(
-      'UPDATE posts SET ? WHERE id = ?',
+      'UPDATE posts SET ? WHERE post_id = ?',
       [updatedRecord, id],
       (err, res) => {
         if (err) {
@@ -70,7 +70,7 @@ Post.getAll = (result) => {
   
   // Delete a record
   Post.deleteById = (id, result) => {
-    db.query('DELETE FROM posts WHERE id = ?', id, (err, res) => {
+    db.query('DELETE FROM posts WHERE post_id = ?', id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);
