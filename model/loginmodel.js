@@ -14,7 +14,8 @@ const User = function (User) {
   this.address = User.address;
   this.resume = User.resume;
   this.about = User.about;
-  
+  this.coverPic_path = User.coverPic_path;
+  this.coverPic = User.coverPic;
 };
 
 // Create a new User
@@ -47,9 +48,9 @@ User.getByUserPassword = (username, password, result) => {
 };
 
 //
-User.getById = (id, result) => {
+User.getById = (user_id, result) => {
   db.query('SELECT * From users WHERE user_id = ?' , 
-   id, (err, res) => {
+  user_id, (err, res) => {
     if (err) {
       console.error("Error reading User:", err);
       result(err, null);

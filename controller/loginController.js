@@ -83,9 +83,9 @@ exports.Login = (req, res) => {
 //
 
 exports.readOneUser = (req, res) => {
-  const id = req.body.id;
+  const user_id = req.body.user_id;
 
-  User.getById(id, (err, data) => {
+  User.getById(user_id, (err, data) => {
     if (err) {
       if (err.message === "User not found") {
         res.status(404).json({
