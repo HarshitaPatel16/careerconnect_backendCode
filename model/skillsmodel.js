@@ -23,7 +23,7 @@ Skills.create = (newSkills, result) => {
 
 // Read all Skillss
 Skills.getAll = (result) => {
-    db.query('SELECT * FROM skills ORDER BY skills_id DESC;', (err, res) => {
+    db.query('SELECT * FROM skills ORDER BY user_id DESC;', (err, res) => {
       if (err) {
         console.error('Error reading Skills:', err);
         result(err, null);
@@ -34,18 +34,32 @@ Skills.getAll = (result) => {
   };
   
   // Read a single record
-  Skills.getById = (id, result) => {
-    db.query('SELECT * FROM skills WHERE skills_id = ?', id, (err, res) => {
+
+  Skills.getById = (user_id, result) => {
+    db.query('SELECT * FROM skills WHERE user_id = ?', user_id, (err, res) => {
       if (err) {
         console.error('Error reading Skills:', err);
         result(err, null);
       } else if (res.length === 0) {
         result({ message: 'Skills not found' }, null);
       } else {
-        result(null, res[0]);
+        result(null, res);
       }
     });
   };
+  
+  // Skills.getById = (user_id, result) => {
+  //   db.query('SELECT * FROM skills WHERE user_id = ?', user_id, (err, res) => {
+  //     if (err) {
+  //       console.error('Error reading Skills:', err);
+  //       result(err, null);
+  //     } else if (res.length === 0) {
+  //       result({ message: 'Skills not found' }, null);
+  //     } else {
+  //       result(null, res[0]);
+  //     }
+  //   });
+  // };
   
   // Update a record
   Skills.updateById = (id, updatedRecord, result) => {
