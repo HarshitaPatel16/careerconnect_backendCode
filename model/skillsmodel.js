@@ -80,8 +80,8 @@ Skills.getAll = (result) => {
   };
   
   // Delete a record
-  Skills.deleteById = (id, result) => {
-    db.query('DELETE FROM skills WHERE skills_id = ?', id, (err, res) => {
+  Skills.deleteById = (skills_id, result) => {
+    db.query('DELETE FROM skills WHERE skills_id = ?', skills_id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);

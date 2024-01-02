@@ -39,9 +39,9 @@ exports.readAllExperience = (req, res) => {
 
 // Read a single Experience
 exports.readOneExperience = (req, res) => {
-  const id = req.body.id;
+  const user_id = req.body.user_id;
 
-  Experience.getById(id, (err, data) => {
+  Experience.getById(user_id, (err, data) => {
     if (err) {
       if (err.message === "Experience not found") {
         res.status(404).json({
@@ -86,9 +86,9 @@ exports.updateExperience = (req, res) => {
 
 // Delete a Experience
 exports.deleteExperience = (req, res) => {
-  const id = req.body.id;
+  const experience_id = req.body.experience_id;
 
-  Experience.deleteById(id, (err, data) => {
+  Experience.deleteById(experience_id, (err, data) => {
     if (err) {
       if (err.message === "Experience not found") {
         res.status(404).json({

@@ -112,9 +112,9 @@ exports.updateSkills = (req, res) => {
 
 // Delete a Skills
 exports.deleteSkills = (req, res) => {
-  const id = req.body.id;
+  const skills_id = req.body.skills_id;
 
-  Skills.deleteById(id, (err, data) => {
+  Skills.deleteById(skills_id, (err, data) => {
     if (err) {
       if (err.message === "Skills not found") {
         res.status(404).json({

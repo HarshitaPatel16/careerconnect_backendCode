@@ -7,7 +7,7 @@ const User = function (User) {
   this.last_name = User.last_name;
   this.username = User.username;
   this.email = User.email;
-  this.password = User.password;
+  this.password = User.password || '';
   this.mobile = User.mobile;
   this.profilePic_path = User.profilePic_path;
   this.profilePic = User.profilePic;
@@ -16,6 +16,7 @@ const User = function (User) {
   this.about = User.about;
   this.coverPic_path = User.coverPic_path;
   this.coverPic = User.coverPic;
+  this.resume_path = User.resume_path;
 };
 
 // Create a new User
@@ -64,10 +65,10 @@ User.getById = (user_id, result) => {
 
 
 // Update a user profile
-User.updateById = (id, updateduser, result) => {
+User.updateById = (user_id, updateduser, result) => {
   db.query(
     "UPDATE users SET ? WHERE user_id = ?",
-    [updateduser, id],
+    [updateduser, user_id],
     (err, res) => {
       if (err) {
         console.error("Error updating user:", err);

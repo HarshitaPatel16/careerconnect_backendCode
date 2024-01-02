@@ -3,7 +3,7 @@ const db = require("../config/db");
 // Define the customer schema
 const Experience = function (Experience) {
   this.experience_id = Experience.Experience_id;
-  this.company_name = Experience.company_name;
+  this.user_id = Experience.user_id;
   this.start_year = Experience.start_year;
   this.end_year = Experience.end_year;
   this.description = Experience.description;
@@ -11,6 +11,9 @@ const Experience = function (Experience) {
   this.employe_type = Experience.employe_type;
   this.location = Experience.location;
   this.location_type = Experience.location_type;
+  this.job_title = Experience.job_title;
+  this.company = Experience.company;
+
   
 };
 
@@ -40,15 +43,15 @@ Experience.getAll = (result) => {
   };
   
   // Read a single record
-  Experience.getById = (id, result) => {
-    db.query('SELECT * FROM experience WHERE experience_id = ?', id, (err, res) => {
+  Experience.getById = (user_id, result) => {
+    db.query('SELECT * FROM experience WHERE user_id = ?', user_id, (err, res) => {
       if (err) {
         console.error('Error reading Experience:', err);
         result(err, null);
       } else if (res.length === 0) {
         result({ message: 'Experience not found' }, null);
       } else {
-        result(null, res[0]);
+        result(null, res);
       }
     });
   };
@@ -72,8 +75,8 @@ Experience.getAll = (result) => {
   };
   
   // Delete a record
-  Experience.deleteById = (id, result) => {
-    db.query('DELETE FROM experience WHERE experience_id = ?', id, (err, res) => {
+  Experience.deleteById = (experience_id, result) => {
+    db.query('DELETE FROM experience WHERE experience_id = ?', experience_id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);
