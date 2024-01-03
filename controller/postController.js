@@ -1,57 +1,112 @@
 const Post = require("../model/postmodel");
 
 // Create a new Post
-exports.createPost = (req, res) => {
-    let newPost = new Post(req.body);
-    if (req.files !== null && req.files !== undefined && req.files.post_img !== null && req.files.post_img !== undefined) {
-      const file = req.files.post_img;
-      const timestamp = Date.now();
-      const fileName = `${timestamp}-${file.name}`;
-      const filePath = `\public/post/${fileName}`;
+// exports.createPost = (req, res) => {
+//     let newPost = new Post(req.body);
+//     if (req.files !== null && req.files !== undefined && req.files.post_img !== null && req.files.post_img !== undefined) {
+//       const file = req.files.post_img;
+//       const timestamp = Date.now();
+//       const fileName = `${timestamp}-${file.name}`;
+//       const filePath = `\public/post/${fileName}`;
   
-      file.mv(filePath, (err) => {
-        if (err) {
-          console.error("Error uploading file:", err);
-          return res.status(500).json({ error: 'Error uploading file.' });
-        }
-        else {
-          newPost = {
-            ...newPost,
-            post_img: fileName,
-            post_img_path: filePath,
-          }
-          Post.create(newPost, (err, data) => {
-            if (err) {
-              res.status(500).json({
-                message: "Error creating Post",
-                error: err,
-              });
-            } else {
-              res.status(201).json({
-                message: "Post created successfully",
-                id: data.id,
-              });
-            }
-          });
-        }
-      });
-    }
-    {
+//       file.mv(filePath, (err) => {
+//         if (err) {
+//           console.error("Error uploading file:", err);
+//           return res.status(500).json({ error: 'Error uploading file.' });
+//         }
+//         else {
+//           newPost = {
+//             ...newPost,
+//             post_img: fileName,
+//             post_img_path: filePath,
+//           }
+//           Post.create(newPost, (err, data) => {
+//             if (err) {
+//               res.status(500).json({
+//                 message: "Error creating Post",
+//                 error: err,
+//               });
+//             } else {
+//               res.status(201).json({
+//                 message: "Post created successfully",
+//                 id: data.id,
+//               });
+//             }
+//           });
+//         }
+//       });
+//     }
+//     {
+//       Post.create(newPost, (err, data) => {
+//         if (err) {
+//           res.status(500).json({
+//             message: "Error creating Post",
+//             error: err,
+//           });
+//         } else {
+//           res.status(201).json({
+//             message: "Post created successfully",
+//             id: data.id,
+//           });
+//         }
+//       });
+//     }
+// };
+
+exports.createPost = (req, res) => {
+  let newPost = new Post(req.body);
+
+  if (req.files !== null && req.files !== undefined && req.files.post_img !== null && req.files.post_img !== undefined) {
+    const file = req.files.post_img;
+    const timestamp = Date.now();
+    const fileName = `${timestamp}-${file.name}`;
+    const filePath = `\public/post/${fileName}`;
+
+    file.mv(filePath, (err) => {
+      if (err) {
+        console.error("Error uploading file:", err);
+        return res.status(500).json({ error: 'Error uploading file.' });
+      }
+
+      newPost = {
+        ...newPost,
+        post_img: fileName,
+        post_img_path: filePath,
+      };
+
+      // Move this part outside the file.mv callback
       Post.create(newPost, (err, data) => {
         if (err) {
-          res.status(500).json({
+          return res.status(500).json({
             message: "Error creating Post",
             error: err,
           });
-        } else {
-          res.status(201).json({
-            message: "Post created successfully",
-            id: data.id,
-          });
         }
+
+        res.status(201).json({
+          message: "Post created successfully",
+          id: data.id,
+        });
       });
-    }
+    });
+  } else {
+    // Move this part outside the if statement
+    Post.create(newPost, (err, data) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Error creating Post",
+          error: err,
+        });
+      }
+
+      res.status(201).json({
+        message: "Post created successfully",
+        id: data.id,
+      });
+    });
+  }
 };
+
 
 // Read all records
 exports.readAllPost = (req, res) => {
