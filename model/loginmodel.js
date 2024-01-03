@@ -3,20 +3,20 @@ const db = require("../config/db");
 // Define the customer schema
 const User = function (User) {
   this.user_id = User.user_id;
-  this.first_name = User.first_name;
-  this.last_name = User.last_name;
-  this.username = User.username;
-  this.email = User.email;
+  this.first_name = User.first_name || '';
+  this.last_name = User.last_name || '';
+  this.username = User.username || '';
+  this.email = User.email || '';
   this.password = User.password || '';
-  this.mobile = User.mobile;
-  this.profilePic_path = User.profilePic_path;
-  this.profilePic = User.profilePic;
-  this.address = User.address;
-  this.resume = User.resume;
-  this.about = User.about;
-  this.coverPic_path = User.coverPic_path;
-  this.coverPic = User.coverPic;
-  this.resume_path = User.resume_path;
+  this.mobile = User.mobile || '';
+  this.profilePic_path = User.profilePic_path || '';
+  this.profilePic = User.profilePic || '';
+  this.address = User.address || '';
+  this.resume = User.resume || '';
+  this.about = User.about || '';
+  this.coverPic_path = User.coverPic_path || '';
+  this.coverPic = User.coverPic || '';
+  this.resume_path = User.resume_path || '';
 };
 
 // Create a new User

@@ -197,184 +197,22 @@ exports.readOneUser = (req, res) => {
 };
 
 // user update profile
-// exports.UpdateUser = (req, res) => {
-//   const id = req.body.id;
-//   const updatedUser = new User(req.body);
-
-//   if (req.files !== null && req.files !== undefined && req.files.profilePic !== null && req.files.profilePic !== undefined) {
-//     const file = req.files.profilePic;
-//     const timestamp = Date.now();
-//     const fileName = `${timestamp}-${file.name}`;
-//     console.log("fileName", fileName)
-//     const filePath = `\public/user/${fileName}`;
-
-//     file.mv(filePath, (err) => {
-//       if (err) {
-//         return res.status(500).json({ error: 'Error uploading file.' });
-//       }
-//       else {
-//         const finalData = {
-//           id : updatedUser.id,
-//           first_name: updatedUser.first_name,
-//           last_name: updatedUser.last_name,
-//           username: updatedUser.username,
-//           email: updatedUser.email,
-//           password: updatedUser.password,
-//           mobile: updatedUser.mobile,
-//           profilePic: fileName,
-//           profilePic_path: filePath,
-//         }
-//         User.updateById(id, finalData, (err, data) => {
-//           if (err) {
-//             if (err.message === "User not found") {
-//               res.status(404).json({
-//                 message: "User not found",
-//               });
-//             } else {
-//               res.status(500).json({
-//                 message: "Error updating User",
-//                 error: err,
-//               });
-//             }
-//           } else {
-//             res.status(200).json({
-//               message: "User updated successfully",
-//             });
-//           }
-//         });
-//       }
-//     });
-//   }
-//   else
-//   {
-
-//     User.updateById(id, updatedUser, (err, data) => {
-//     if (err) {
-//       if (err.message === "User not found") {
-//         res.status(404).json({
-//           message: "User not found",
-//         });
-//       } else {
-//         res.status(500).json({
-//           message: "Error updating User",
-//           error: err,
-//         });
-//       }
-//     } else {
-//       res.status(200).json({
-//         message: "User updated successfully",
-//       });
-//     }
-//   });
-// }
- 
-// };
 
 
 
 
-exports.UpdateUser = (req, res) => {
-  const user_id = req.body.user_id;
-  const updatedUser = {};  // Create an empty object to store the properties to be updated
-
-  // Handle resume
-  if (req.files && req.files.resume) {
-    const resumeFile = req.files.resume;
-    const timestamp = Date.now();
-    const resumeFileName = `${timestamp}-${resumeFile.name}`;
-    const resumeFilePath = `\public/user/${resumeFileName}`;
-    console.log("Before file upload");
-
-    resumeFile.mv(resumeFilePath, (resumeErr) => {
-      if (resumeErr) {
-        console.log("Error uploading resume:", resumeErr);
-        return res.status(500).json({ error: 'Error uploading resume.' });
-      }
-      console.log("Resume uploaded successfully");
-
-      updatedUser.resume = resumeFileName;
-      updatedUser.resume_path = resumeFilePath;
-
-      // Update user information with the new resume
-      User.updateById(user_id, updatedUser, (updateErr, updateData) => {
-        if (updateErr) {
-          if (updateErr.message === "User not found") {
-            res.status(404).json({
-              message: "User not found",
-            });
-          } else {
-            res.status(500).json({
-              message: "Error updating User",
-              error: updateErr,
-            });
-          }
-        } else {
-          res.status(200).json({
-            message: "User updated successfully",
-          });
-        }
-      });
-    });
-  } else {
-    // If no new resume is provided, update user information without changing resume
-    User.updateById(user_id, req.body, (err, data) => {
-      if (err) {
-        if (err.message === "User not found") {
-          res.status(404).json({
-            message: "User not found",
-          });
-        } else {
-          res.status(500).json({
-            message: "Error updating User",
-            error: err,
-          });
-        }
-      } else {
-        res.status(200).json({
-          message: "User updated successfully",
-        });
-      }
-    });
-  }
-};
 
 // exports.UpdateUser = (req, res) => {
 //   const user_id = req.body.user_id;
 //   const updatedUser = {};  // Create an empty object to store the properties to be updated
 
-//   // Handle profile picture
-//   if (req.files && req.files.profilePic) {
-//     const profilePicFile = req.files.profilePic;
-//     const timestamp = Date.now();
-//     const profilePicFileName = `${timestamp}-${profilePicFile.name}`;
-//     const profilePicFilePath = `\public/user/${profilePicFileName}`;
-
-//     profilePicFile.mv(profilePicFilePath, (profilePicErr) => {
-//       if (profilePicErr) {
-//         console.log("Error uploading profile picture:", profilePicErr);
-//         return res.status(500).json({ error: 'Error uploading profile picture.' });
-//       }
-//       console.log("Profile picture uploaded successfully");
-
-//       updatedUser.profilePic = profilePicFileName;
-//       updatedUser.profilePic_path = profilePicFilePath;
-
-//       // After profile picture upload, check for resume upload
-//       handleResumeUpload(user_id, updatedUser, req.files.resume, res);
-//     });
-//   } else {
-//     // If no new profile picture is provided, check for resume upload directly
-//     handleResumeUpload(user_id, updatedUser, req.files.resume, res);
-//   }
-// };
-
-// function handleResumeUpload(user_id, updatedUser, resumeFile, res) {
 //   // Handle resume
-//   if (resumeFile) {
+//   if (req.files && req.files.resume) {
+//     const resumeFile = req.files.resume;
 //     const timestamp = Date.now();
 //     const resumeFileName = `${timestamp}-${resumeFile.name}`;
 //     const resumeFilePath = `\public/user/${resumeFileName}`;
-//     console.log("Before resume upload");
+//     console.log("Before file upload");
 
 //     resumeFile.mv(resumeFilePath, (resumeErr) => {
 //       if (resumeErr) {
@@ -386,7 +224,7 @@ exports.UpdateUser = (req, res) => {
 //       updatedUser.resume = resumeFileName;
 //       updatedUser.resume_path = resumeFilePath;
 
-//       // Update user information with the new profile picture and resume
+//       // Update user information with the new resume
 //       User.updateById(user_id, updatedUser, (updateErr, updateData) => {
 //         if (updateErr) {
 //           if (updateErr.message === "User not found") {
@@ -408,7 +246,7 @@ exports.UpdateUser = (req, res) => {
 //     });
 //   } else {
 //     // If no new resume is provided, update user information without changing resume
-//     User.updateById(user_id, updatedUser, (err, data) => {
+//     User.updateById(user_id, req.body, (err, data) => {
 //       if (err) {
 //         if (err.message === "User not found") {
 //           res.status(404).json({
@@ -427,9 +265,288 @@ exports.UpdateUser = (req, res) => {
 //       }
 //     });
 //   }
-// }
+// };
 
 
+exports.UpdateUser = (req, res) => {
+  const user_id = req.body.user_id;
+  const updatedRecord = {};
+
+  if (req.body.username) {
+    updatedRecord.username = req.body.username;
+  }
+
+  if (req.body.mobile) {
+    updatedRecord.mobile = req.body.mobile;
+  }
+  if (req.body.email) {
+    updatedRecord.email = req.body.email;
+  }
+  if (req.body.address) {
+    updatedRecord.address = req.body.address;
+  }
+  if (req.body.first_name) {
+    updatedRecord.first_name = req.body.first_name;
+  }if (req.body.last_name) {
+    updatedRecord.last_name = req.body.last_name;
+  }
 
 
+  if (
+    (req.files !== null && req.files !== undefined && req.files.profilePic !== null && req.files.profilePic !== undefined) ||
+    (req.files !== null && req.files !== undefined && req.files.resume !== null && req.files.resume !== undefined)
+  ) {
+    // Handle user image
+    if (req.files.profilePic) {
+      const file = req.files.profilePic;
+      const timestamp = Date.now();
+      const fileName = `${timestamp}-${file.name}`;
+      const filePath = `\public/user/${fileName}`;
 
+      file.mv(filePath, (err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error uploading user image.' });
+        }
+        const finalData = {
+          profilePic: fileName,
+          profilePic_path: filePath,
+        };
+
+
+        // Update user information with the new user image
+        User.updateById(user_id, finalData, (err, data) => {
+          if (err) {
+            if (err.message === "user not found") {
+              res.status(404).json({
+                message: "user not found",
+              });
+            } else {
+              res.status(500).json({
+                message: "Error updating user",
+                error: err,
+              });
+            }
+          } else {
+            res.status(200).json({
+              message: "user updated successfully",
+            });
+          }
+        });
+      });
+    }
+
+    // Handle resume
+    if (req.files.resume) {
+      const resumeFile = req.files.resume;
+      const timestamp = Date.now();
+      const resumeFileName = `${timestamp}-${resumeFile.name}`;
+      const resumeFilePath = `\public/user/${resumeFileName}`;
+
+      resumeFile.mv(resumeFilePath, (err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error uploading resume.' });
+        }
+
+        const resumeData = {
+          resume: resumeFileName,
+          resume_path: resumeFilePath,
+        };
+
+        // Update user information with the new resume
+        User.updateById(user_id, resumeData, (err, data) => {
+          if (err) {
+            if (err.message === "User not found") {
+              res.status(404).json({
+                message: "User not found",
+              });
+            } else {
+              res.status(500).json({
+                message: "Error updating User",
+                error: err,
+              });
+            }
+          } else {
+            res.status(200).json({
+              message: "User updated successfully",
+            });
+          }
+        });
+      });
+    }
+  } else {
+    // If no user image or resume is provided, update user information without changing them
+    User.updateById(user_id, updatedRecord, (err, data) => {
+      if (err) {
+        if (err.message === "user not found") {
+          res.status(404).json({
+            message: "user not found",
+          });
+        } else {
+          res.status(500).json({
+            message: "Error updating user",
+            error: err,
+          });
+        }
+      } else {
+        res.status(200).json({
+          message: "user updated successfully",
+        });
+      }
+    });
+  }
+};
+
+// exports.UpdateUser = (req, res) => {
+//   const user_id = req.body.user_id;
+//   const updatedRecord = {};
+
+//   if (
+//     (req.files !== null && req.files !== undefined && req.files.profilePic !== null && req.files.profilePic !== undefined) ||
+//     (req.files !== null && req.files !== undefined && req.files.resume !== null && req.files.resume !== undefined)
+//   ) {
+//     // Handle user image
+//     if (req.files.profilePic) {
+//       const file = req.files.profilePic;
+//       const timestamp = Date.now();
+//       const fileName = `${timestamp}-${file.name}`;
+//       const filePath = `\public/user/${fileName}`;
+
+//       file.mv(filePath, (err) => {
+//         if (err) {
+//           return res.status(500).json({ error: 'Error uploading user image.' });
+//         }
+//         updatedRecord.profilePic = fileName;
+//         updatedRecord.profilePic_path = filePath;
+
+//         // Update user information with the new user image
+//         updateUserAndResume();
+//       });
+//     }
+
+//     // Handle resume
+//     if (req.files.resume) {
+//       const resumeFile = req.files.resume;
+//       const timestamp = Date.now();
+//       const resumeFileName = `${timestamp}-${resumeFile.name}`;
+//       const resumeFilePath = `\public/user/${resumeFileName}`;
+
+//       resumeFile.mv(resumeFilePath, (err) => {
+//         if (err) {
+//           return res.status(500).json({ error: 'Error uploading resume.' });
+//         }
+
+//         updatedRecord.resume = resumeFileName;
+//         updatedRecord.resume_path = resumeFilePath;
+
+//         // Update user information with the new resume
+//         updateUserAndResume();
+//       });
+//     }
+//   } else {
+//     // If no user image or resume is provided, update user information without changing them
+//     updateUserAndResume();
+//   }
+
+//   function updateUserAndResume() {
+//     // Update user information with the new profile picture and resume
+//     User.updateById(user_id, updatedRecord, (err, data) => {
+//       if (err) {
+//         if (err.message === "User not found") {
+//           res.status(404).json({
+//             message: "User not found",
+//           });
+//         } else {
+//           res.status(500).json({
+//             message: "Error updating User",
+//             error: err,
+//           });
+//         }
+//       } else {
+//         res.status(200).json({
+//           message: "User updated successfully",
+//         });
+//       }
+//     });
+//   }
+// };
+
+
+// exports.UpdateUser = (req, res) => {
+//   const user_id = req.body.user_id;
+//   const updatedRecord = {};
+
+//   // Handle user image
+//   if (req.files && req.files.profilePic) {
+//     const file = req.files.profilePic;
+//     const timestamp = Date.now();
+//     const fileName = `${timestamp}-${file.name}`;
+//     const filePath = `\public/user/${fileName}`;
+
+//     file.mv(filePath, (err) => {
+//       if (err) {
+//         return res.status(500).json({ error: 'Error uploading user image.' });
+//       }
+//       updatedRecord.profilePic = fileName;
+//       updatedRecord.profilePic_path = filePath;
+
+//       // Update user information with the new user image
+//       updateUserAndResume();
+//     });
+//   }
+
+//   // Handle resume
+//   if (req.files && req.files.resume) {
+//     const resumeFile = req.files.resume;
+//     const timestamp = Date.now();
+//     const resumeFileName = `${timestamp}-${resumeFile.name}`;
+//     const resumeFilePath = `\public/user/${resumeFileName}`;
+
+//     resumeFile.mv(resumeFilePath, (err) => {
+//       if (err) {
+//         return res.status(500).json({ error: 'Error uploading resume.' });
+//       }
+
+//       updatedRecord.resume = resumeFileName;
+//       updatedRecord.resume_path = resumeFilePath;
+
+//       // Update user information with the new resume
+//       updateUserAndResume();
+//     });
+//   }
+
+//   // If no user image or resume is provided, update user information without changing them
+//   updateUserAndResume();
+
+//   function updateUserAndResume() {
+//     if (Object.keys(updatedRecord).length > 0) {
+//       // Only update if there is new data
+//       // Update user information with the new profile picture and resume
+//       User.updateById(user_id, updatedRecord, (err, data) => {
+//         if (err) {
+//           console.error("Error updating user:", err);
+//           if (err.message === "User not found") {
+//             return res.status(404).json({
+//               message: "User not found",
+//             });
+//           } else {
+//             return res.status(500).json({
+//               message: "Error updating User",
+//               error: err,
+//             });
+//           }
+//         } else {
+//           console.log("User updated successfully");
+//           return res.status(200).json({
+//             message: "User updated successfully",
+//           });
+//         }
+//       });
+//     } else {
+//       // No new data to update
+//       console.log("No updates provided");
+//       return res.status(200).json({
+//         message: "No updates provided",
+//       });
+//     }
+//   }
+// };
