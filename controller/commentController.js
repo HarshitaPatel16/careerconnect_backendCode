@@ -39,9 +39,9 @@ exports.readAllComment = (req, res) => {
 
 // Read a single Comment
 exports.readOneComment = (req, res) => {
-  const id = req.body.id;
+  const post_id = req.body.post_id;
 
-  Comment.getById(id, (err, data) => {
+  Comment.getById(post_id, (err, data) => {
     if (err) {
       if (err.message === "Comment not found") {
         res.status(404).json({

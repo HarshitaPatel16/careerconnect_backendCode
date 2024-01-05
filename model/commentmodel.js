@@ -3,10 +3,10 @@ const db = require("../config/db");
 // Define the customer schema
 const Comment = function (Comment) {
   this.comment_id = Comment.comment_id;
-  this.desc = Comment.desc;
+  this.comment = Comment.comment;
   this.createdAt = Comment.createdAt;
-  this.userId = Comment.userId;
-  this.postId = Comment.postId;
+  this.user_id = Comment.user_id;
+  this.post_id = Comment.post_id;
 
 };
 
@@ -36,15 +36,21 @@ Comment.getAll = (result) => {
   };
   
   // Read a single record
-  Comment.getById = (id, result) => {
-    db.query('SELECT * FROM comment WHERE comment_id = ?', id, (err, res) => {
+  Comment.getById = (post_id, result) => {
+    db.query("SELECT " +
+    "comment.*, " +
+    "users.username, " +
+    "users.profilePic " +
+    "FROM comment " +
+    "INNER JOIN users ON comment.user_id = users.user_id " +
+    "WHERE post_id = ? ", post_id, (err, res) => {
       if (err) {
         console.error('Error reading Comment:', err);
         result(err, null);
       } else if (res.length === 0) {
         result({ message: 'Comment not found' }, null);
       } else {
-        result(null, res[0]);
+        result(null, res);
       }
     });
   };

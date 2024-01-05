@@ -21,7 +21,7 @@ const CommentRouter = require("./routes/commenrroutes");
 const StoryRouter = require("./routes/storyrouters");
 const SkillsRouter = require("./routes/skillsroutes");
 const ExperienceRouter = require("./routes/experienceroutes");
-const Connections = require("./routes/connectroutes");
+const ConnectionsRouter = require("./routes/connectroutes");
 
 var app = express();
 app.use(fileupload());
@@ -56,7 +56,7 @@ app.use("/api/comment", CommentRouter);
 app.use("/api/story", StoryRouter);
 app.use("/api/skills",SkillsRouter);
 app.use("/api/experience", ExperienceRouter);
-app.use("/api/connections", CommentRouter);
+app.use("/api/connections", ConnectionsRouter);
 
 
 

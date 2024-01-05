@@ -26,7 +26,14 @@ Post.create = (newPost, result) => {
 
 // Read all posts
 Post.getAll = (result) => {
-    db.query('SELECT * FROM posts ORDER BY post_id DESC;', (err, res) => {
+    db.query("SELECT " +
+    "posts.*, " +
+    "users.username, " +
+    "users.profilePic " +
+    "FROM posts " +
+    "INNER JOIN users ON posts.user_id = users.user_id " +
+    "ORDER BY posts.post_id DESC;",    
+     (err, res) => {
       if (err) {
         console.error('Error reading Post:', err);
         result(err, null);

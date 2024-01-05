@@ -174,6 +174,22 @@ exports.Login = (req, res) => {
 
 
 //
+exports.readAllUser = (req, res) => {
+  User.getAll((err, data) => {
+    if (err) {
+      res.status(500).json({
+        message: "Error reading records",
+        error: err,
+      });
+    } else {
+      res.status(200).json({
+        status: 1,
+        message: "Successfully got users List",
+        data: data,
+      });
+    }
+  });
+};
 
 exports.readOneUser = (req, res) => {
   const user_id = req.body.user_id;

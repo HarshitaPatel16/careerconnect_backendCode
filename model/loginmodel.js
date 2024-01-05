@@ -48,6 +48,19 @@ User.getByUserPassword = (username, password, result) => {
   );
 };
 
+//reall all user
+User.getAll = (result) => {
+  db.query('SELECT * FROM users;', (err, res) => {
+    if (err) {
+      console.error('Error reading user:', err);
+      result(err, null);
+    } else {
+      result(null, res);
+    }
+  });
+};
+
+
 //
 User.getById = (user_id, result) => {
   db.query('SELECT * From users WHERE user_id = ?' , 

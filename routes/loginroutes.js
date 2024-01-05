@@ -8,6 +8,8 @@ router.post("/Login", loginController.Login);
 router.post("/Registion", loginController.Registion);
 // user Update 
 router.post("/UpdateUser", loginController.UpdateUser);
+//user all
+router.post("/readAllUser", loginController.readAllUser);
 
 
 router.post("/readOneUser", loginController.readOneUser);

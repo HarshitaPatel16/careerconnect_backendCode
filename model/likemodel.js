@@ -3,14 +3,40 @@ const db = require("../config/db");
 // Define the customer schema
 const Like = function (Like) {
   this.like_id = Like.like_id;
-  this.userId = Like.userId;
-  this.postId = Like.postId;
+  this.IsLiked = Like.IsLiked;
+  this.user_id = Like.user_id;
+  this.post_id = Like.post_id;
 
 };
 
 // Create a new Like
+// Like.create = (newLike, result) => {
+//   db.query("INSERT INTO like SET ?", newLike, (err, res) => {
+//     if (err) {
+//       console.error("Error creating Like:", err);
+//       result(err, null);
+//     } else {
+//       result(null, { id: res.insertId });
+//     }
+//   });
+// };
+
+// Like.create = (newLike, result) => {
+//   db.query("INSERT INTO `like` SET ?", newLike, (err, res) => {
+//     if (err) {
+//       console.error("Error creating Like:", err);
+//       result(err, null);
+//     } else {
+//       result(null, { id: res.insertId });
+//     }
+//   });
+// };
+
 Like.create = (newLike, result) => {
-  db.query("INSERT INTO like SET ?", newLike, (err, res) => {
+  const { IsLiked, ...otherProps } = newLike;
+  const sqlQuery = "INSERT INTO `like` SET ?";
+
+  db.query(sqlQuery, { ...otherProps, IsLiked: IsLiked ? 1 : 0 }, (err, res) => {
     if (err) {
       console.error("Error creating Like:", err);
       result(err, null);
@@ -19,7 +45,6 @@ Like.create = (newLike, result) => {
     }
   });
 };
-
 
 // Read all Likes
 Like.getAll = (result) => {
@@ -34,18 +59,29 @@ Like.getAll = (result) => {
   };
   
   // Read a single record
-  Like.getById = (id, result) => {
-    db.query('SELECT * FROM like WHERE like_id = ?', id, (err, res) => {
+  Like.getById = (post_id, result) => {
+    db.query('SELECT COUNT(*) AS likeCount FROM `like` WHERE post_id = ? AND IsLiked = 1', post_id, (err, res) => {
       if (err) {
         console.error('Error reading Like:', err);
         result(err, null);
-      } else if (res.length === 0) {
-        result({ message: 'Like not found' }, null);
       } else {
-        result(null, res[0]);
+        result(null, res[0].likeCount);
       }
     });
   };
+  
+  // Like.getById = (id, result) => {
+  //   db.query('SELECT * FROM like WHERE post_id = ?', id, (err, res) => {
+  //     if (err) {
+  //       console.error('Error reading Like:', err);
+  //       result(err, null);
+  //     } else if (res.length === 0) {
+  //       result({ message: 'Like not found' }, null);
+  //     } else {
+  //       result(null, res[0]);
+  //     }
+  //   });
+  // };
   
   // Update a record
   Like.updateById = (id, updatedRecord, result) => {
