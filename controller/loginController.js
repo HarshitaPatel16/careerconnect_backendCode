@@ -2,59 +2,6 @@ const User = require("../model/loginmodel");
 
 // Create a new User
 
-// exports.Registion = (req, res) => {
-//   let newUser = new User(req.body);
-//   if (req.files !== null && req.files !== undefined && req.files.profilePic !== null && req.files.profilePic !== undefined) {
-//     const file = req.files.profilePic;
-//     const timestamp = Date.now();
-//     const fileName = `${timestamp}-${file.name}`;
-//     const filePath = `\public/user/${fileName}`;
-
-//     file.mv(filePath, (err) => {
-//       if (err) {
-//         console.error("Error uploading file:", err);
-//         return res.status(500).json({ error: 'Error uploading file.' });
-//       }
-//       else {
-//         newUser = {
-//           ...newUser,
-//           profilePic: fileName,
-//           profilePic_path: filePath,
-//         }
-//         User.create(newUser, (err, data) => {
-//           if (err) {
-//             res.status(500).json({
-//               message: "Error creating User",
-//               error: err,
-//             });
-//           } else {
-//             res.status(201).json({
-//               message: "User created successfully",
-//               id: data.id,
-//             });
-//           }
-//         });
-//       }
-//     });
-//   }
-//   {
-//     User.create(newUser, (err, data) => {
-//       if (err) {
-//         res.status(500).json({
-//           message: "Error creating User",
-//           error: err,
-//         });
-//       } else {
-//         res.status(201).json({
-//           message: "User created successfully",
-//           id: data.id,
-//         });
-//       }
-//     });
-//   }
-// };
-
-
 
 exports.Registion = (req, res) => {
   let newUser = new User(req.body);
@@ -305,6 +252,8 @@ exports.UpdateUser = (req, res) => {
     updatedRecord.first_name = req.body.first_name;
   }if (req.body.last_name) {
     updatedRecord.last_name = req.body.last_name;
+  }if (req.body.profile_heading) {
+    updatedRecord.profile_heading = req.body.profile_heading;
   }
 
 
@@ -566,3 +515,129 @@ exports.UpdateUser = (req, res) => {
 //     }
 //   }
 // };
+
+
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const randomstring = require('randomstring');
+
+// ... (other imports)
+
+// exports.forgetPassword = async (req, res) => {
+//   const { email } = req.body;
+
+//   try {
+//     // Check if the user with the provided email exists
+//     User.getByEmail(email, (err, user) => {
+//       if (err) {
+//         console.error('Error in getByEmail:', err);
+//         return res.status(500).json({ message: 'Internal server error' });
+//       }
+
+//       if (!user) {
+//         return res.status(404).json({ message: 'User not found' });
+//       }
+
+//       // Generate OTP
+//       const otp = randomstring.generate({
+//         length: 6,
+//         charset: 'numeric',
+//       });
+
+//       // Hash the OTP before saving it to the database
+//       bcrypt.hash(otp, 10, async (hashErr, hashedOtp) => {
+//         if (hashErr) {
+//           console.error('Error hashing OTP:', hashErr);
+//           return res.status(500).json({ message: 'Internal server error' });
+//         }
+
+//         // Save the hashed OTP to the user record in the database
+//         await User.updateOtpByEmail(email, hashedOtp, (updateErr, updateResult) => {
+//           if (updateErr) {
+//             console.error('Error updating OTP by email:', updateErr);
+//             return res.status(500).json({ message: 'Internal server error' });
+//           }
+
+//           // Send OTP to the user's email
+//           const transporter = nodemailer.createTransport({
+//             // configure your email service here
+//             service: 'gmail',
+//             auth: {
+//               user: 'your_email@gmail.com',
+//               pass: 'your_email_password',
+//             },
+//           });
+
+//           const mailOptions = {
+//             from: 'your_email@gmail.com',
+//             to: email,
+//             subject: 'Reset Password OTP',
+//             text: `Your OTP for resetting the password is: ${otp}`,
+//           };
+
+//           transporter.sendMail(mailOptions, (mailErr, info) => {
+//             if (mailErr) {
+//               console.error('Error sending email:', mailErr);
+//               return res.status(500).json({ message: 'Error sending OTP email' });
+//             }
+
+//             console.log('Email sent:', info.response);
+//             res.status(200).json({ message: 'OTP sent successfully' });
+//           });
+//         });
+//       });
+//     });
+//   } catch (error) {
+//     console.error('Error in forget password logic:', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
+const { sendEmail } = require('../sendmail'); // Import the sendEmail function
+
+
+
+
+
+exports.forgetPassword = async (req, res) => {
+  const { email } = req.body;
+  console.log('Email received:', email);
+
+
+  // Check if the email exists in the database
+  const user = await User.getByEmail(email);
+  console.log('User:', user);
+
+
+  if (!user) {
+    console.log('User not found for email:', email);
+
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Generate OTP
+  const otp = randomstring.generate({
+    length: 4,
+    charset: 'numeric',
+  });
+  console.log('Generated OTP:', otp);
+
+
+  // Save the OTP to the user record in the database
+  await User.saveOTP(user.user_id, otp);
+
+  // Send the OTP to the user's email
+  const subject = 'Reset Password OTP';
+  const text = `Your OTP to reset the password is: ${otp}`;
+  const html = `<p>Your OTP to reset the password is: <strong>${otp}</strong></p>`;
+
+  try {
+    await sendEmail(email, subject, text, html);
+    return res.status(200).json({ message: 'OTP sent to email' });
+
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return res.status(500).json({ message: 'Error sending OTP email' });
+  }
+};
+

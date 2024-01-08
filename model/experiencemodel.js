@@ -7,7 +7,6 @@ const Experience = function (Experience) {
   this.start_year = Experience.start_year;
   this.end_year = Experience.end_year;
   this.description = Experience.description;
-  this.profile_heading = Experience.profile_heading;
   this.employe_type = Experience.employe_type;
   this.location = Experience.location;
   this.location_type = Experience.location_type;

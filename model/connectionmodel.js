@@ -3,8 +3,8 @@ const db = require("../config/db");
 // Define the customer schema
 const Connections = function (Connections) {
   this.connection_id = Connections.connection_id;
-  this.user_id_1 = Connections.user_id_1;
-  this.user_id_2 = Connections.user_id_2;
+  this.user_id_From = Connections.user_id_From;
+  this.user_id_To = Connections.user_id_To;
   this.status = Connections.status;
   this.created_at = Connections.created_at;
 
@@ -12,7 +12,7 @@ const Connections = function (Connections) {
 
 // Create a new Connections
 Connections.create = (newConnections, result) => {
-  db.query("INSERT INTO connections (user_id_1, user_id_2) VALUES (?, ?)", newConnections, (err, res) => {
+  db.query("INSERT INTO connections SET", newConnections, (err, res) => {
     if (err) {
       console.error("Error creating Connections:", err);
       result(err, null);

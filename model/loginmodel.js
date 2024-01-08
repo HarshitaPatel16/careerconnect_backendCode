@@ -17,6 +17,10 @@ const User = function (User) {
   this.coverPic_path = User.coverPic_path || '';
   this.coverPic = User.coverPic || '';
   this.resume_path = User.resume_path || '';
+  this.profile_heading = User.profile_heading || '';
+  this.otp = User.otp || '';
+
+
 };
 
 // Create a new User
@@ -94,6 +98,105 @@ User.updateById = (user_id, updateduser, result) => {
     }
   );
 };
+
+
+
+// User.getByEmail = (email, result) => {
+//   db.query('SELECT * FROM users WHERE email = ?', email, (err, res) => {
+//     if (err) {
+//       console.error('Error reading user by email:', err);
+//       if (typeof result === 'function') {
+//         result(err, null);
+//       }
+//     } else if (res.length === 0) {
+//       if (typeof result === 'function') {
+//         result(null, null);
+//       }
+//     } else {
+//       if (typeof result === 'function') {
+//         result(null, res[0]);
+//       }
+//     }
+//   });
+// };
+
+User.getByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM users WHERE email = ?', email, (err, res) => {
+      if (err) {
+        console.error('Error reading user by email:', err);
+        reject(err);
+      } else if (res.length === 0) {
+        console.log('User not found for email:', email);
+        resolve(null);
+      } else {
+        console.log('User found:', res[0]);
+        resolve(res[0]);
+      }
+    });
+  });
+};
+
+
+// User.getByEmail = (email, result) => {
+//   db.query('SELECT * FROM users WHERE email = ?', email, (err, res) => {
+//     if (err) {
+//       console.error('Error reading user by email:', err);
+//       if (typeof result === 'function') {
+//         result(err, null);
+//       }
+//     } else if (res.length === 0) {
+//       console.log('User not found for email:', email);
+//       if (typeof result === 'function') {
+//         result(null, null);
+//       }
+//     } else {
+//       console.log('User found:', res[0]);
+//       if (typeof result === 'function') {
+//         result(null, res[0]);
+//       }
+//     }
+//   });
+// };
+
+
+
+// Save OTP to user record
+// User.saveOTP = (user_id, otp, result) => {
+//   db.query(
+//     "UPDATE users SET otp = ? WHERE user_id = ?",
+//     [otp, user_id],
+//     (err, res) => {
+//       if (err) {
+//         console.error("Error saving OTP:", err);
+//         result(err, null);
+//       } else {
+//         result(null, { message: "OTP saved successfully" });
+//       }
+//     }
+//   );
+// };
+User.saveOTP = (user_id, otp, result) => {
+  db.query(
+    "UPDATE users SET otp = ? WHERE user_id = ?",
+    [otp, user_id],
+    (err, res) => {
+      if (err) {
+        console.error("Error saving OTP:", err);
+        if (typeof result === 'function') {
+          result(err, null);
+        }
+      } else {
+        console.log('OTP saved successfully');
+        if (typeof result === 'function') {
+          result(null, { message: "OTP saved successfully" });
+        }
+      }
+    }
+  );
+};
+
+
 
 
 module.exports = User;
