@@ -3,7 +3,7 @@ const db = require("../config/db");
 // Define the customer schema
 const Like = function (Like) {
   this.like_id = Like.like_id;
-  this.IsLiked = Like.IsLiked;
+  this.is_liked = Like.is_liked;
   this.user_id = Like.user_id;
   this.post_id = Like.post_id;
 
@@ -33,10 +33,10 @@ const Like = function (Like) {
 // };
 
 Like.create = (newLike, result) => {
-  const { IsLiked, ...otherProps } = newLike;
+  const { is_liked, ...otherProps } = newLike;
   const sqlQuery = "INSERT INTO `like` SET ?";
 
-  db.query(sqlQuery, { ...otherProps, IsLiked: IsLiked ? 1 : 0 }, (err, res) => {
+  db.query(sqlQuery, { ...otherProps, is_liked: is_liked ? 1 : 0 }, (err, res) => {
     if (err) {
       console.error("Error creating Like:", err);
       result(err, null);
@@ -60,7 +60,7 @@ Like.getAll = (result) => {
   
   // Read a single record
   Like.getById = (post_id, result) => {
-    db.query('SELECT COUNT(*) AS likeCount FROM `like` WHERE post_id = ? AND IsLiked = 1', post_id, (err, res) => {
+    db.query('SELECT COUNT(*) AS likeCount FROM `like` WHERE post_id = ? AND is_liked = 1', post_id, (err, res) => {
       if (err) {
         console.error('Error reading Like:', err);
         result(err, null);
