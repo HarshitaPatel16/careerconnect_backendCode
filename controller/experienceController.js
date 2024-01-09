@@ -61,10 +61,10 @@ exports.readOneExperience = (req, res) => {
 
 // Update a Experience
 exports.updateExperience = (req, res) => {
-  const id = req.body.id;
+  const experience_id = req.body.experience_id;
   const updatedRecord = new Experience(req.body);
 
-  Experience.updateById(id, updatedRecord, (err, data) => {
+  Experience.updateById(experience_id, updatedRecord, (err, data) => {
     if (err) {
       if (err.message === "Experience not found") {
         res.status(404).json({

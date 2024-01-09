@@ -62,10 +62,10 @@ Skills.getAll = (result) => {
   // };
   
   // Update a record
-  Skills.updateById = (id, updatedRecord, result) => {
+  Skills.updateById = (skills_id, updatedRecord, result) => {
     db.query(
       'UPDATE skills SET ? WHERE skills_id = ?',
-      [updatedRecord, id],
+      [updatedRecord, skills_id],
       (err, res) => {
         if (err) {
           console.error('Error updating Skills:', err);

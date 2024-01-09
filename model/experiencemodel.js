@@ -56,10 +56,10 @@ Experience.getAll = (result) => {
   };
   
   // Update a record
-  Experience.updateById = (id, updatedRecord, result) => {
+  Experience.updateById = (experience_id, updatedRecord, result) => {
     db.query(
       'UPDATE experience SET ? WHERE experience_id = ?',
-      [updatedRecord, id],
+      [updatedRecord, experience_id],
       (err, res) => {
         if (err) {
           console.error('Error updating Experience:', err);

@@ -87,10 +87,10 @@ exports.readOneSkills = (req, res) => {
 
 // Update a Skills
 exports.updateSkills = (req, res) => {
-  const id = req.body.id;
+  const skills_id = req.body.skills_id;
   const updatedRecord = new Skills(req.body);
 
-  Skills.updateById(id, updatedRecord, (err, data) => {
+  Skills.updateById(skills_id, updatedRecord, (err, data) => {
     if (err) {
       if (err.message === "Skills not found") {
         res.status(404).json({
