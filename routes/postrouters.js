@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const PostController = require("../controller/postController");
+const Post = require("../model/postmodel");
 
 // Create a new record
 router.post("/createPost", PostController.createPost);
@@ -16,5 +17,8 @@ router.post("/updatePost", PostController.updatePost);
 
 // Delete a record
 router.post("/deletePost", PostController.deletePost);
+
+// sum post
+router.post("/readAllSumPOST", PostController.readAllSumPOST);
 
 module.exports = router;

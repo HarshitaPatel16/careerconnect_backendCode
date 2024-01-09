@@ -90,5 +90,19 @@ Post.getAll = (result) => {
   };
   
 
+  //sum of post acouding user id based
+  Post.getSumPost = (user_id, result) => {
+    db.query('SELECT user_id, COUNT(*) AS post_sum FROM social1.posts WHERE user_id = ?', user_id, (err, res) => {
+      if (err) {
+        console.error('Error reading Post:', err);
+        result(err, null);
+      } else if (res.length === 0) {
+        result({ message: 'Post not found' }, null);
+      } else {
+        result(null, res[0]);
+      }
+    });
+  };
+
 
 module.exports = Post;

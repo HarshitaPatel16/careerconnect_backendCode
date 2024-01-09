@@ -112,7 +112,7 @@ exports.Login = (req, res) => {
         }
       } else {
         res.status(200).json({
-          message: "User User Successfully",
+          message: "User Successfully",
           data: data
         });
       }

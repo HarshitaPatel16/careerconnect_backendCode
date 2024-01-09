@@ -23,7 +23,7 @@ Skills.create = (newSkills, result) => {
 
 // Read all Skillss
 Skills.getAll = (result) => {
-    db.query('SELECT * FROM skills ORDER BY user_id DESC;', (err, res) => {
+    db.query('SELECT * FROM skills ', (err, res) => {
       if (err) {
         console.error('Error reading Skills:', err);
         result(err, null);

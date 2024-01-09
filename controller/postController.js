@@ -148,6 +148,29 @@ exports.readOnePost = (req, res) => {
   });
 };
 
+//sum post
+
+exports.readAllSumPOST = (req, res) => {
+  const user_id = req.body.user_id;
+
+  Post.getSumPost(user_id, (err, data) => {
+    if (err) {
+      if (err.message === "Post not found") {
+        res.status(404).json({
+          message: "Post not found",
+        });
+      } else {
+        res.status(500).json({
+          message: "Error reading Post",
+          error: err,
+        });
+      }
+    } else {
+      res.status(200).json(data);
+    }
+  });
+};
+
 // Update a Post
 exports.updatePost = (req, res) => {
   const id = req.body.id;
