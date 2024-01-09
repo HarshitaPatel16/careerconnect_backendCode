@@ -9,6 +9,7 @@ const Educations = function (Educations) {
   this.institution_name = Educations.description;
   this.degree = Educations.degree;
   this.activities = Educations.activities;
+  this.field_of_study = Educations.field_of_study;
 };
 
 // Create a new Educations
