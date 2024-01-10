@@ -46,6 +46,7 @@ const Like = function (Like) {
 //     }
 //   });
 // };
+//
 
 Like.create = (newLike, result) => {
   const { is_liked, ...otherProps } = newLike;
