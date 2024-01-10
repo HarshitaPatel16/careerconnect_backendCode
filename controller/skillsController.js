@@ -38,26 +38,26 @@ exports.readAllSkills = (req, res) => {
 };
 
 // Read a single Skills
-// exports.readOneSkills = (req, res) => {
-//   const user_id = req.body.user_id;
+exports.readOneBySkillsId = (req, res) => {
+  const skills_id = req.body.skills_id;
 
-//   Skills.getById(user_id, (err, data) => {
-//     if (err) {
-//       if (err.message === "Skills not found") {
-//         res.status(404).json({
-//           message: "Skills not found",
-//         });
-//       } else {
-//         res.status(500).json({
-//           message: "Error reading Skills",
-//           error: err,
-//         });
-//       }
-//     } else {
-//       res.status(200).json(data);
-//     }
-//   });
-// };
+  Skills.getByIdskills(skills_id, (err, data) => {
+    if (err) {
+      if (err.message === "Skills not found") {
+        res.status(404).json({
+          message: "Skills not found",
+        });
+      } else {
+        res.status(500).json({
+          message: "Error reading Skills",
+          error: err,
+        });
+      }
+    } else {
+      res.status(200).json(data);
+    }
+  });
+};
 
 exports.readOneSkills = (req, res) => {
   const user_id = req.body.user_id;

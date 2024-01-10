@@ -47,6 +47,20 @@ Skills.getAll = (result) => {
       }
     });
   };
+
+
+  Skills.getByIdskills = (skills_id, result) => {
+    db.query('SELECT * FROM skills WHERE skills_id = ?', skills_id, (err, res) => {
+      if (err) {
+        console.error('Error reading Skills:', err);
+        result(err, null);
+      } else if (res.length === 0) {
+        result({ message: 'Skills not found' }, null);
+      } else {
+        result(null, res);
+      }
+    });
+  };
   
   // Skills.getById = (user_id, result) => {
   //   db.query('SELECT * FROM skills WHERE user_id = ?', user_id, (err, res) => {

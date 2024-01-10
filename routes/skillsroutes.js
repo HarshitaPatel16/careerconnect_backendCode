@@ -11,6 +11,9 @@ router.get("/readAllSkills", SkillsController.readAllSkills);
 // Read a single record
 router.post("/readOneSkills", SkillsController.readOneSkills);
 
+router.post("/readOneBySkillsId", SkillsController.readOneBySkillsId);
+
+
 // Update a record
 router.post("/updateSkills", SkillsController.updateSkills);
 

@@ -39,6 +39,8 @@ exports.readAllEducations = (req, res) => {
 
 // Read a single Educations
 exports.readOneEducations = (req, res) => {
+
+
   const user_id = req.body.user_id;
 
   Educations.getById(user_id, (err, data) => {
@@ -86,9 +88,9 @@ exports.updateEducations = (req, res) => {
 
 // Delete a Educations
 exports.deleteEducations = (req, res) => {
-  const Educations_id = req.body.Educations_id;
+  const education_id = req.body.education_id;
 
-  Educations.deleteById(Educations_id, (err, data) => {
+  Educations.deleteById(education_id, (err, data) => {
     if (err) {
       if (err.message === "Educations not found") {
         res.status(404).json({
