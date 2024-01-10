@@ -33,11 +33,30 @@ const Like = function (Like) {
 // };
 //
 
+// Like.create = (newLike, result) => {
+//   const { is_liked, ...otherProps } = newLike;
+//   const sqlQuery = "INSERT INTO `like` SET ?";
+
+//   db.query(sqlQuery, { ...otherProps, is_liked: is_liked ? 1 : 0 }, (err, res) => {
+//     if (err) {
+//       console.error("Error creating Like:", err);
+//       result(err, null);
+//     } else {
+//       result(null, { id: res.insertId });
+//     }
+//   });
+// };
+
 Like.create = (newLike, result) => {
   const { is_liked, ...otherProps } = newLike;
   const sqlQuery = "INSERT INTO `like` SET ?";
+  console.log("is_liked value:", JSON.parse(is_liked)); // Parse the string to a boolean
 
-  db.query(sqlQuery, { ...otherProps, is_liked: is_liked ? 1 : 0 }, (err, res) => {
+  console.log("Payload:", newLike); // Log the payload
+
+  db.query(sqlQuery, { ...otherProps, is_liked: JSON.parse(is_liked) ? 1 : 0 }, (err, res) => {
+    console.log("SQL Query:", sqlQuery); // Log the SQL query
+
     if (err) {
       console.error("Error creating Like:", err);
       result(err, null);
