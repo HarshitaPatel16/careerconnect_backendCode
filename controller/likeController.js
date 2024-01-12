@@ -38,10 +38,12 @@ exports.readAllLike = (req, res) => {
 };
 
 // Read a single Like
-exports.readOneLike = (req, res) => {
-  const id = req.body.id;
 
-  Like.getById(id, (err, data) => {
+
+exports.readOneLike = (req, res) => {
+  const post_id = req.body.post_id;
+
+  Like.getById(post_id, (err, likeCount) => {
     if (err) {
       if (err.message === "Like not found") {
         res.status(404).json({
@@ -54,7 +56,7 @@ exports.readOneLike = (req, res) => {
         });
       }
     } else {
-      res.status(200).json(data);
+      res.status(200).json({ likeCount: likeCount });
     }
   });
 };

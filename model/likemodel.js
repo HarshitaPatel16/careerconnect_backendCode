@@ -10,42 +10,6 @@ const Like = function (Like) {
 };
 
 // Create a new Like
-// Like.create = (newLike, result) => {
-//   db.query("INSERT INTO like SET ?", newLike, (err, res) => {
-//     if (err) {
-//       console.error("Error creating Like:", err);
-//       result(err, null);
-//     } else {
-//       result(null, { id: res.insertId });
-//     }
-//   });
-// };
-
-// Like.create = (newLike, result) => {
-//   db.query("INSERT INTO `like` SET ?", newLike, (err, res) => {
-//     if (err) {
-//       console.error("Error creating Like:", err);
-//       result(err, null);
-//     } else {
-//       result(null, { id: res.insertId });
-//     }
-//   });
-// };
-//
-
-// Like.create = (newLike, result) => {
-//   const { is_liked, ...otherProps } = newLike;
-//   const sqlQuery = "INSERT INTO `like` SET ?";
-
-//   db.query(sqlQuery, { ...otherProps, is_liked: is_liked ? 1 : 0 }, (err, res) => {
-//     if (err) {
-//       console.error("Error creating Like:", err);
-//       result(err, null);
-//     } else {
-//       result(null, { id: res.insertId });
-//     }
-//   });
-// };
 
 
 Like.create = (newLike, result) => {
@@ -79,30 +43,24 @@ Like.getAll = (result) => {
     });
   };
   
-  // Read a single record
-  Like.getById = (post_id, result) => {
-    db.query('SELECT COUNT(*) AS likeCount FROM `like` WHERE post_id = ? AND is_liked = 1', post_id, (err, res) => {
+
+
+Like.getById = (post_id, result) => {
+  db.query(
+    'SELECT post_id, COUNT(*) AS likeCount FROM `like` WHERE post_id = ? AND is_liked = 1 GROUP BY post_id',
+    post_id,
+    (err, res) => {
       if (err) {
         console.error('Error reading Like:', err);
         result(err, null);
       } else {
-        result(null, res[0].likeCount);
+        result(null, res.length > 0 ? res[0] : { post_id, likeCount: 0 });
       }
-    });
-  };
-  
-  // Like.getById = (id, result) => {
-  //   db.query('SELECT * FROM like WHERE post_id = ?', id, (err, res) => {
-  //     if (err) {
-  //       console.error('Error reading Like:', err);
-  //       result(err, null);
-  //     } else if (res.length === 0) {
-  //       result({ message: 'Like not found' }, null);
-  //     } else {
-  //       result(null, res[0]);
-  //     }
-  //   });
-  // };
+    }
+  );
+};
+
+ 
   
   // Update a record
   Like.updateById = (id, updatedRecord, result) => {
