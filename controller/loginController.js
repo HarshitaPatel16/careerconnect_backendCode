@@ -700,3 +700,27 @@ exports.readOneuserByEmail = (req, res) => {
     }
   });
 };
+
+
+exports.readOneuserOtp = (req, res) => {
+  const otp = req.body.otp;
+
+  User.getByUserOtp(otp, (err, data) => {
+    if (err) {
+      res.status(500).json({
+        message: "Error reading user",
+        error: err,
+      });
+    } else {
+      if (data) {
+        res.status(200).json({
+          message: "Otp verification successful",
+        });
+      } else {
+        res.status(404).json({
+          message: "Otp not found for verification",
+        });
+      }
+    }
+  });
+};

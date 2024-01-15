@@ -26,6 +26,8 @@ router.post("/resetpassword", loginController.resetpassword);
 
 router.post("/readOneuserByEmail", loginController.readOneuserByEmail);
 
+router.post("/readOneuserOtp", loginController.readOneuserOtp);
+
 
 console.log('Reached forgetPassword controller');
 

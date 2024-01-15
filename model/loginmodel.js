@@ -231,4 +231,20 @@ User.getByEmailIdverification = (email, result) => {
   });
 };
 
+User.getByUserOtp = (otp, result) => {
+  db.query('SELECT * FROM users WHERE otp = ?;', otp, (err, res) => {
+    if (err) {
+      console.error("Error reading users:", err);
+      result(err, null);
+    } else {
+      if (res && res.length > 0) {
+        result(null, res[0]);
+      } else {
+        result(null, null);
+      }
+    }
+  });
+};
+
+
 module.exports = User;
