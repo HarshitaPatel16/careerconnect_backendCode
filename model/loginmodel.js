@@ -137,6 +137,23 @@ User.getByEmail = (email) => {
   });
 };
 
+User.getByOtp = (otp) => {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM users WHERE otp = ?', otp, (err, res) => {
+      if (err) {
+        console.error('Error reading user by email:', err);
+        reject(err);
+      } else if (res.length === 0) {
+        console.log('User not found for email:', email);
+        resolve(null);
+      } else {
+        console.log('User found:', res[0]);
+        resolve(res[0]);
+      }
+    });
+  });
+};
+
 
 // User.getByEmail = (email, result) => {
 //   db.query('SELECT * FROM users WHERE email = ?', email, (err, res) => {
@@ -196,7 +213,22 @@ User.saveOTP = (user_id, otp, result) => {
   );
 };
 
+// email varification 
 
 
+User.getByEmailIdverification = (email, result) => {
+  db.query('SELECT * FROM users WHERE email = ?;', email, (err, res) => {
+    if (err) {
+      console.error("Error reading users:", err);
+      result(err, null);
+    } else {
+      if (res && res.length > 0) {
+        result(null, res[0]);
+      } else {
+        result(null, null);
+      }
+    }
+  });
+};
 
 module.exports = User;

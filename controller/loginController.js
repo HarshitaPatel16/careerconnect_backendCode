@@ -641,3 +641,62 @@ exports.forgetPassword = async (req, res) => {
   }
 };
 
+exports.resetpassword = async (req, res) => {
+  const { email, otp, newPassword, currentPassword } = req.body;
+
+  try {
+    // Verify OTP
+    const user = await User.getByEmail(email);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Check if current password matches (optional, depending on your requirements)
+    if (currentPassword && !user.isValidPassword(currentPassword)) {
+      return res.status(400).json({ message: 'Invalid current password' });
+    }
+
+    // Update password
+    user.password = newPassword;
+    user.otp = null; // Clear OTP after successful password change
+    await user.save();
+
+    return res.status(200).json({ message: 'Password reset successful' });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
+//email verificaiton
+
+
+exports.readOneuserByEmail = (req, res) => {
+  const email = req.body.email;
+
+  User.getByEmailIdverification(email, (err, data) => {
+    if (err) {
+      res.status(500).json({
+        message: "Error reading user",
+        error: err,
+      });
+    } else {
+      if (data) {
+        res.status(200).json({
+          message: "Email verification successful",
+        });
+      } else {
+        res.status(404).json({
+          message: "Email not found for verification",
+        });
+      }
+    }
+  });
+};
