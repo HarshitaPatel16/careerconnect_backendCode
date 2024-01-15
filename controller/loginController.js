@@ -306,8 +306,6 @@ const { sendEmail } = require('../sendmail'); // Import the sendEmail function
 
 
 
-
-
 exports.forgetPassword = async (req, res) => {
   const { email } = req.body;
   console.log('Email received:', email);
@@ -351,15 +349,8 @@ exports.forgetPassword = async (req, res) => {
 };
 
 
-
-
-
-
-
-
-
-
 exports.readOneuserOtp = (req, res) => {
+  const email = req.query.email;
   const otp = req.body.otp;
 
   User.getByUserOtp(otp, (err, data) => {
@@ -376,8 +367,94 @@ exports.readOneuserOtp = (req, res) => {
       } else {
         res.status(404).json({
           message: "Otp not found for verification",
+          email: email,
+          otp: otp,
         });
       }
     }
   });
+};
+
+
+// const updatePassword = async (user_id, newPassword) => {
+//   try {
+//     // Implement your password update logic here, e.g., update the user's password in the database
+//     await User.updateById(user_id, { password: newPassword });
+//     console.log('Password updated successfully');
+//   } catch (error) {
+//     console.error('Error updating password:', error);
+//     throw new Error('Failed to update password');
+//   }
+// };
+
+// // API endpoint for updating the password
+// exports.updatePassword = async (req, res) => {
+//   const { user_id, otp, newPassword } = req.body;
+
+//   // Verify the OTP
+//   const isValidOTP = await User.getByOtp(otp);
+
+//   if (!isValidOTP) {
+//     return res.status(400).json({ message: 'Invalid OTP' });
+//   }
+
+//   // Update the password
+//   try {
+//     await updatePassword(user_id, newPassword);
+//     return res.status(200).json({ message: 'Password updated successfully' });
+//   } catch (error) {
+//     return res.status(500).json({ message: 'Error updating password' });
+//   }
+// };
+
+
+
+exports.updatePassword = (req, res) => {
+
+  const email = req.body.email;
+
+  const updatedCustomer = {
+
+    password: req.body.password
+
+  }
+
+
+
+  User.updateByIdPassword(email, updatedCustomer, (err, data) => {
+
+    if (err) {
+
+      if (err.message === "Customer not found") {
+
+        res.status(404).json({
+
+          message: "Customer not found",
+
+        });
+
+      } else {
+
+        res.status(500).json({
+
+          message: "Error updating Customer",
+
+          error: err,
+
+        });
+
+      }
+
+    } else {
+
+      res.status(200).json({
+
+        message: "Password updated successfully",
+
+      });
+
+    }
+
+  });
+
 };

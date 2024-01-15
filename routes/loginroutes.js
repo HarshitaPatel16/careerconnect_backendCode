@@ -22,6 +22,7 @@ console.log('Reached userRouter forgetPassword route');
 
 router.post("/forgetPassword", loginController.forgetPassword);
 
+router.post("/updatePassword", loginController.updatePassword);
 
 
 router.post("/readOneuserOtp", loginController.readOneuserOtp);

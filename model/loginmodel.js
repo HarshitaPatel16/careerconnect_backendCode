@@ -99,7 +99,22 @@ User.updateById = (user_id, updateduser, result) => {
   );
 };
 
-
+User.updateByIdPassword = (email, updateduser, result) => {
+  db.query(
+    "UPDATE users SET ? WHERE email = ?",
+    [updateduser, email],
+    (err, res) => {
+      if (err) {
+        console.error("Error updating user:", err);
+        result(err, null);
+      } else if (res.affectedRows === 0) {
+        result({ message: "user not found" }, null);
+      } else {
+        result(null, { message: "user updated successfully" });
+      }
+    }
+  );
+};
 
 
 User.getByOtp = (otp) => {
@@ -160,6 +175,22 @@ User.getByUserOtp = (otp, result) => {
   });
 };
 
+User.getByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query('SELECT * FROM users WHERE email = ?', email, (err, res) => {
+      if (err) {
+        console.error('Error reading user by email:', err);
+        reject(err);
+      } else if (res.length === 0) {
+        console.log('User not found for email:', email);
+        resolve(null);
+      } else {
+        console.log('User found:', res[0]);
+        resolve(res[0]);
+      }
+    });
+  });
+};
 
 
 
