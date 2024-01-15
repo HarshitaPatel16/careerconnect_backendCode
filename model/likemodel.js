@@ -12,24 +12,24 @@ const Like = function (Like) {
 // Create a new Like
 
 
-Like.create = (newLike, result) => {
-  const { is_liked, ...otherProps } = newLike;
-  const sqlQuery = "INSERT INTO `like` SET ?";
-  console.log("is_liked value:", JSON.parse(is_liked)); // Parse the string to a boolean
+// Like.create = (newLike, result) => {
+//   const { is_liked, ...otherProps } = newLike;
+//   const sqlQuery = "INSERT INTO `like` SET ?";
+//   console.log("is_liked value:", JSON.parse(is_liked)); // Parse the string to a boolean
 
-  console.log("Payload:", newLike); // Log the payload console
+//   console.log("Payload:", newLike); // Log the payload console
 
-  db.query(sqlQuery, { ...otherProps, is_liked: JSON.parse(is_liked) ? 1 : 0 }, (err, res) => {
-    console.log("SQL Query:", sqlQuery); // Log the SQL query
+//   db.query(sqlQuery, { ...otherProps, is_liked: JSON.parse(is_liked) ? 1 : 0 }, (err, res) => {
+//     console.log("SQL Query:", sqlQuery); // Log the SQL query
 
-    if (err) {
-      console.error("Error creating Like:", err);
-      result(err, null);
-    } else {
-      result(null, { id: res.insertId });
-    }
-  });
-};
+//     if (err) {
+//       console.error("Error creating Like:", err);
+//       result(err, null);
+//     } else {
+//       result(null, { id: res.insertId });
+//     }
+//   });
+// };
 
 // Read all Likes
 Like.getAll = (result) => {
@@ -94,6 +94,69 @@ Like.getById = (post_id, result) => {
     });
   };
   
+
+
+  Like.getByUserIdAndPostId = (user_id, post_id, result) => {
+    db.query(
+      'SELECT * FROM `like` WHERE user_id = ? AND post_id = ?',
+      [user_id, post_id],
+      (err, res) => {
+        if (err) {
+          console.error('Error reading Like:', err);
+          result(err, null);
+        } else {
+          result(null, res.length > 0 ? res[0] : null);
+        }
+      }
+    );
+  };
+  
+  Like.createLike = (newLike, result) => {
+  const { is_liked, ...otherProps } = newLike;
+  const sqlQuery = "INSERT INTO `like` SET ?";
+  console.log("is_liked value:", JSON.parse(is_liked)); // Parse the string to a boolean
+
+  console.log("Payload:", newLike); // Log the payload console
+
+  db.query(sqlQuery, { ...otherProps, is_liked: JSON.parse(is_liked) ? 1 : 0 }, (err, res) => {
+    console.log("SQL Query:", sqlQuery); // Log the SQL query
+
+    if (err) {
+      console.error("Error creating Like:", err);
+      result(err, null);
+    } else {
+      result(null, { id: res.insertId });
+    }
+  });
+};
+
+  // Like.createLike = (newLike, result) => {
+  //   db.query('INSERT INTO `like` SET ?', newLike, (err, res) => {
+  //     if (err) {
+  //       console.error('Error creating Like:', err);
+  //       result(err, null);
+  //     } else {
+  //       result(null, { id: res.insertId });
+  //     }
+  //   });
+  // };
+  
+  Like.updateLike = (like_id, is_liked, result) => {
+    db.query(
+      'UPDATE `like` SET is_liked = ? WHERE like_id = ?',
+      [is_liked ? 1 : 0, like_id],
+      (err, res) => {
+        if (err) {
+          console.error('Error updating Like:', err);
+          result(err);
+        } else if (res.affectedRows === 0) {
+          result({ message: 'Like not found' });
+        } else {
+          result(null);
+        }
+      }
+    );
+  };
 
 
 module.exports = Like;

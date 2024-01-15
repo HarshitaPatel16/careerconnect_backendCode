@@ -44,8 +44,8 @@ Post.getAll = (result) => {
   };
   
   // Read a single record
-  Post.getById = (id, result) => {
-    db.query('SELECT * FROM posts WHERE post_id = ?', id, (err, res) => {
+  Post.getById = (user_id, result) => {
+    db.query('SELECT * FROM posts WHERE user_id = ?', user_id, (err, res) => {
       if (err) {
         console.error('Error reading Post:', err);
         result(err, null);

@@ -17,4 +17,7 @@ router.post("/updateLike", LikeController.updateLike);
 // Delete a record
 router.post("/deleteLike", LikeController.deleteLike);
 
+router.post('/addOrUpdateLike', LikeController.addOrUpdateLike);
+
+
 module.exports = router;

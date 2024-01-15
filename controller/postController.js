@@ -128,9 +128,9 @@ exports.readAllPost = (req, res) => {
 
 // Read a single Post
 exports.readOnePost = (req, res) => {
-  const id = req.body.id;
+  const user_id = req.body.user_id;
 
-  Post.getById(id, (err, data) => {
+  Post.getById(user_id, (err, data) => {
     if (err) {
       if (err.message === "Post not found") {
         res.status(404).json({

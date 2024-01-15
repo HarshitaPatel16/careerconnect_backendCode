@@ -109,3 +109,112 @@ exports.deleteLike = (req, res) => {
     }
   });
 };
+
+exports.addOrUpdateLike = (req, res) => {
+  const { user_id, post_id, is_liked } = req.body;
+
+  // Check if the user has already liked the post
+  Like.getByUserIdAndPostId(user_id, post_id, (err, existingLike) => {
+    if (err) {
+      return res.status(500).json({
+        message: "Error checking existing like",
+        error: err,
+      });
+    }
+
+    // If the user has already liked the post, update the existing like status
+    if (existingLike) {
+      Like.updateLike(existingLike.like_id, JSON.parse(is_liked) ? 1 : 0, (updateErr) => {
+        if (updateErr) {
+          return res.status(500).json({
+            message: "Error updating like",
+            error: updateErr,
+          });
+        }
+        res.status(200).json({
+          message: "Like updated successfully",
+        });
+      });
+    } else {
+      // If the user has not liked the post, create a new like entry
+      Like.createLike({ user_id, post_id, is_liked: JSON.parse(is_liked) ? 1 : 0 }, (createErr) => {
+        if (createErr) {
+          return res.status(500).json({
+            message: "Error creating like",
+            error: createErr,
+          });
+        }
+        res.status(201).json({
+          message: "Like created successfully",
+        });
+      });
+    }
+  });
+};
+
+
+// exports.addOrUpdateLike = (req, res) => {
+//   const { user_id, post_id, is_liked } = req.body;
+
+//   // Check if the user has already liked the post
+//   Like.getByUserIdAndPostId(user_id, post_id, (err, existingLike) => {
+//     if (err) {
+//       return res.status(500).json({
+//         message: "Error checking existing like",
+//         error: err,
+//       });
+//     }
+
+//     // If the user has already liked the post, update the existing like status
+//     if (existingLike) {
+//       Like.updateLike(existingLike.like_id, is_liked === "true", (updateErr) => {
+//         if (updateErr) {
+//           return res.status(500).json({
+//             message: "Error updating like",
+//             error: updateErr,
+//           });
+//         }
+//         res.status(200).json({
+//           message: "Like updated successfully",
+//         });
+//       });
+//     } else {
+//       // If the user has not liked the post, create a new like entry
+//       Like.createLike({ user_id, post_id, is_liked: is_liked === "true" }, (createErr) => {
+//         if (createErr) {
+//           return res.status(500).json({
+//             message: "Error creating like",
+//             error: createErr,
+//           });
+//         }
+//         res.status(201).json({
+//           message: "Like created successfully",
+//         });
+//       });
+//     }
+//   });
+// };
+
+// Read a single Like
+exports.getLike = (req, res) => {
+  const { user_id, post_id } = req.body;
+
+  Like.getByUserIdAndPostId(user_id, post_id, (err, existingLike) => {
+    if (err) {
+      return res.status(500).json({
+        message: "Error reading like",
+        error: err,
+      });
+    }
+
+    if (existingLike) {
+      res.status(200).json({
+        likeCount: existingLike.is_liked ? 1 : 0,
+      });
+    } else {
+      res.status(404).json({
+        message: "Like not found",
+      });
+    }
+  });
+};
