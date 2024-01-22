@@ -242,9 +242,9 @@ exports.updatePost = (req, res) => {
 
 // Delete a Post
 exports.deletePost = (req, res) => {
-  const id = req.body.id;
+  const post_id = req.body.post_id;
 
-  Post.deleteById(id, (err, data) => {
+  Post.deleteById(post_id, (err, data) => {
     if (err) {
       if (err.message === "Post not found") {
         res.status(404).json({

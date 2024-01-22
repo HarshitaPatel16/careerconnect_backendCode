@@ -192,7 +192,9 @@ exports.UpdateUser = (req, res) => {
 
   if (
     (req.files !== null && req.files !== undefined && req.files.profilePic !== null && req.files.profilePic !== undefined) ||
-    (req.files !== null && req.files !== undefined && req.files.resume !== null && req.files.resume !== undefined)
+    (req.files !== null && req.files !== undefined && req.files.resume !== null && req.files.resume !== undefined) ||
+    (req.files !== null && req.files !== undefined && req.files.coverPic !== null && req.files.coverPic !== undefined)
+
   ) {
     // Handle user image
     if (req.files.profilePic) {
@@ -271,6 +273,45 @@ exports.UpdateUser = (req, res) => {
         });
       });
     }
+    // handle coverImg
+    if (req.files.coverPic) {
+      const file = req.files.coverPic;
+      const timestamp = Date.now();
+      const fileName = `${timestamp}-${file.name}`;
+      const filePath = `\public/user/${fileName}`;
+
+      file.mv(filePath, (err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Error uploading user image.' });
+        }
+        const finalData = {
+          coverPic: fileName,
+          coverPic_Path: filePath,
+        };
+
+
+        // Update user information with the new user image
+        User.updateById(user_id, finalData, (err, data) => {
+          if (err) {
+            if (err.message === "user not found") {
+              res.status(404).json({
+                message: "user not found",
+              });
+            } else {
+              res.status(500).json({
+                message: "Error updating user",
+                error: err,
+              });
+            }
+          } else {
+            res.status(200).json({
+              message: "user updated successfully",
+            });
+          }
+        });
+      });
+    }
+
   } else {
     // If no user image or resume is provided, update user information without changing them
     User.updateById(user_id, updatedRecord, (err, data) => {
@@ -376,36 +417,6 @@ exports.readOneuserOtp = (req, res) => {
 };
 
 
-// const updatePassword = async (user_id, newPassword) => {
-//   try {
-//     // Implement your password update logic here, e.g., update the user's password in the database
-//     await User.updateById(user_id, { password: newPassword });
-//     console.log('Password updated successfully');
-//   } catch (error) {
-//     console.error('Error updating password:', error);
-//     throw new Error('Failed to update password');
-//   }
-// };
-
-// // API endpoint for updating the password
-// exports.updatePassword = async (req, res) => {
-//   const { user_id, otp, newPassword } = req.body;
-
-//   // Verify the OTP
-//   const isValidOTP = await User.getByOtp(otp);
-
-//   if (!isValidOTP) {
-//     return res.status(400).json({ message: 'Invalid OTP' });
-//   }
-
-//   // Update the password
-//   try {
-//     await updatePassword(user_id, newPassword);
-//     return res.status(200).json({ message: 'Password updated successfully' });
-//   } catch (error) {
-//     return res.status(500).json({ message: 'Error updating password' });
-//   }
-// };
 
 
 

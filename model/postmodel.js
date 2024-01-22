@@ -45,14 +45,21 @@ Post.getAll = (result) => {
   
   // Read a single record
   Post.getById = (user_id, result) => {
-    db.query('SELECT * FROM posts WHERE user_id = ?', user_id, (err, res) => {
+    db.query("SELECT " +
+    "posts.*, " +
+    "users.username, " +
+    "users.profilePic " +
+    "FROM posts " +
+    "INNER JOIN users ON posts.user_id = users.user_id " +
+    "WHERE posts.user_id = ?",
+     user_id, (err, res) => {
       if (err) {
         console.error('Error reading Post:', err);
         result(err, null);
       } else if (res.length === 0) {
         result({ message: 'Post not found' }, null);
       } else {
-        result(null, res[0]);
+        result(null, res);
       }
     });
   };
@@ -76,8 +83,8 @@ Post.getAll = (result) => {
   };
   
   // Delete a record
-  Post.deleteById = (id, result) => {
-    db.query('DELETE FROM posts WHERE post_id = ?', id, (err, res) => {
+  Post.deleteById = (post_id, result) => {
+    db.query('DELETE FROM posts WHERE post_id = ?', post_id, (err, res) => {
       if (err) {
         console.error('Error deleting record:', err);
         result(err, null);
