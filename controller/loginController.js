@@ -1,5 +1,10 @@
 const User = require("../model/loginmodel");
-
+const Skills = require("../model/skillsmodel");
+const Educations = require("../model/educationsmodel");
+const Posts = require("../model/postmodel");
+const Likes = require("../model/likemodel");
+const Comments = require("../model/commentmodel");
+const Experience = require("../model/experiencemodel");
 // Create a new User
 
 
@@ -469,3 +474,94 @@ exports.updatePassword = (req, res) => {
   });
 
 };
+
+
+// readoneuserall relaive dataa
+exports.readOneUserAllData = (req, res) => {
+  const user_id = req.body.user_id;
+
+  User.getById(user_id, (err, userData) => {
+    if (err) {
+      if (err.message === "User not found") {
+        res.status(404).json({
+          message: "User not found",
+        });
+      } else {
+        res.status(500).json({
+          message: "Error reading User",
+          error: err,
+        });
+      }
+    } else {
+      // Fetch additional user data
+      fetchUserDetails(user_id, userData, res);
+    }
+  });
+};
+
+function fetchUserDetails(user_id, userData, res) {
+  const userDetails = { ...userData }; // Copy basic user data
+
+  Skills.getById(user_id, (err, skillsData) => {
+    if (err) {
+      // Handle error
+      res.status(500).json({
+        message: "Error reading Skills",
+        error: err,
+      });
+    } else {
+      userDetails.skills = skillsData;
+
+      Educations.getById(user_id, (err, educationsData) => {
+        if (err) {
+          // Handle error
+          res.status(500).json({
+            message: "Error reading Educations",
+            error: err,
+          });
+        } else {
+          userDetails.educations = educationsData;
+
+          Experience.getById(user_id, (err, experienceData) => {
+            if (err) {
+              // Handle error
+              res.status(500).json({
+                message: "Error reading Experience",
+                error: err,
+              });
+            } else {
+              userDetails.experience = experienceData;
+
+              Posts.getById(user_id, (err, postsData) => {
+                if (err) {
+                  // Handle error
+                  res.status(500).json({
+                    message: "Error reading Posts",
+                    error: err,
+                  });
+                } else {
+                  userDetails.posts = postsData;
+
+                  // Process postsData here
+                  processPostsData(userDetails, res);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+}
+
+
+function processPostsData(userDetails, res) {
+  // Access the postsData from userDetails
+  const postsData = userDetails.posts;
+
+  // Further processing, if needed
+  // For example, you can modify or filter the postsData array
+
+  // Return the final userDetails with processed postsData
+  res.status(200).json(userDetails);
+}

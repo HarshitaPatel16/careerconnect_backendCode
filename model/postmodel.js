@@ -5,7 +5,7 @@ const Post = function (Post) {
   this.post_id = Post.post_id;
   this.desc = Post.desc;
   this.user_id = Post.user_id;
-  this.createdAt = Post.createdAt;
+  this.createdAt = new Date();
   this.post_img = Post.post_img;
   this.post_img_path = Post.post_img_path;
 
@@ -51,7 +51,8 @@ Post.getAll = (result) => {
     "users.profilePic " +
     "FROM posts " +
     "INNER JOIN users ON posts.user_id = users.user_id " +
-    "WHERE posts.user_id = ?",
+    "WHERE posts.user_id = ? " +
+    "ORDER BY posts.post_id DESC ",  
      user_id, (err, res) => {
       if (err) {
         console.error('Error reading Post:', err);

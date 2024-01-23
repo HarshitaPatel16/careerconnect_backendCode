@@ -24,6 +24,7 @@ router.post("/forgetPassword", loginController.forgetPassword);
 
 router.post("/updatePassword", loginController.updatePassword);
 
+router.post("/readOneUserAllData", loginController.readOneUserAllData);
 
 router.post("/readOneuserOtp", loginController.readOneuserOtp);
 

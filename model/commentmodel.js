@@ -54,6 +54,10 @@ Comment.getAll = (result) => {
       }
     });
   };
+ 
+  
+  
+  
   
   // Update a record
   Comment.updateById = (id, updatedRecord, result) => {
