@@ -11,15 +11,31 @@ const Connections = function (Connections) {
 };
 
 // Create a new Connections
+// Connections.create = (newConnections, result) => {
+//   db.query("INSERT INTO connections SET", newConnections, (err, res) => {
+//     if (err) {
+//       console.error("Error creating Connections:", err);
+//       result(err, null);
+//     } else {
+//       result(null, { id: res.insertId });
+//     }
+//   });
+// };
+
+// Create a new Connections
 Connections.create = (newConnections, result) => {
-  db.query("INSERT INTO connections SET", newConnections, (err, res) => {
-    if (err) {
-      console.error("Error creating Connections:", err);
-      result(err, null);
-    } else {
-      result(null, { id: res.insertId });
+  const statusValue = newConnections.status || 'pending'; 
+  db.query("INSERT INTO connections (user_id_From, user_id_To, status, created_at) VALUES (?, ?, ?, ?)", 
+    [newConnections.user_id_From, newConnections.user_id_To, statusValue, newConnections.created_at],
+    (err, res) => {
+      if (err) {
+        console.error("Error creating Connections:", err);
+        result(err, null);
+      } else {
+        result(null, { id: res.insertId });
+      }
     }
-  });
+  );
 };
 
 
@@ -36,19 +52,37 @@ Connections.getAll = (result) => {
   };
   
   // Read a single record
-  Connections.getById = (id, result) => {
-    db.query('SELECT * FROM connections WHERE connection_id = ?', id, (err, res) => {
+  Connections.getByIdUser = (user_id_From, result) => {
+    db.query('SELECT * FROM connections WHERE user_id_From = ?', user_id_From, (err, res) => {
       if (err) {
         console.error('Error reading Connections:', err);
         result(err, null);
       } else if (res.length === 0) {
         result({ message: 'Connections not found' }, null);
       } else {
-        result(null, res[0]);
+        result(null, res);
       }
     });
   };
   
+
+  Connections.getById = (user_id_From, user_id_To, result) => {
+    db.query(
+      'SELECT * FROM connections WHERE user_id_From = ? AND user_id_To = ?',
+      [user_id_From, user_id_To],
+      (err, res) => {
+        if (err) {
+          console.error('Error reading Requests:', err);
+          result(err, null);
+        } else if (res.length === 0) {
+          result(null, null);
+        } else {
+          result(null, res[0]);
+        }
+      }
+    );
+  };
+
   // Update a record
   Connections.updateById = (id, updatedRecord, result) => {
     db.query(

@@ -2,21 +2,53 @@ const Connections = require("../model/connectionmodel");
 
 // Create a new Connections
 exports.createConnections = (req, res) => {
-  const newRecord = new Connections(req.body);
 
-  Connections.create(newRecord, (err, data) => {
+  const { user_id_From, user_id_To } = req.body;
+
+  // Check if the connection request already exists
+  Connections.getById(user_id_From, user_id_To, (err, existingRequest) => {
     if (err) {
       res.status(500).json({
-        message: "Error creating Connections",
+        message: "Error checking existing requests",
         error: err,
       });
+    } else if (existingRequest) {
+      res.status(400).json({
+        message: "Connection request already exists",
+      });
     } else {
-      res.status(201).json({
-        message: "Connections created successfully",
-        id: data.id,
+      // Create a new connection request
+      const newRecord = new Connections(req.body);
+
+      Connections.create(newRecord, (err, data) => {
+        if (err) {
+          res.status(500).json({
+            message: "Error creating Requests",
+            error: err,
+          });
+        } else {
+          res.status(201).json({
+            message: "Connection request sent successfully",
+            id: data.id,
+          });
+        }
       });
     }
   });
+
+  // Connections.create(newRecord, (err, data) => {
+  //   if (err) {
+  //     res.status(500).json({
+  //       message: "Error creating Connections",
+  //       error: err,
+  //     });
+  //   } else {
+  //     res.status(201).json({
+  //       message: "Connections created successfully",
+  //       id: data.id,
+  //     });
+  //   }
+  // });
 };
 
 // Read all records
@@ -39,9 +71,9 @@ exports.readAllConnections = (req, res) => {
 
 // Read a single Connections
 exports.readOneConnections = (req, res) => {
-  const id = req.body.id;
+  const user_id_From = req.body.user_id_From;
 
-  Connections.getById(id, (err, data) => {
+  Connections.getByIdUser(user_id_From, (err, data) => {
     if (err) {
       if (err.message === "Connections not found") {
         res.status(404).json({
